@@ -4,7 +4,7 @@
   <artifactId>entitycount</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>EntityCount</name>
-  <description>Counts entity types in world</description>
+  <description>Count entities in a world</description>
   <properties>
     <maven.compiler.source>1.16</maven.compiler.source>
     <maven.compiler.target>1.16</maven.compiler.target>
