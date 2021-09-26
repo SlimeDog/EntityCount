@@ -1,0 +1,19 @@
+name: ${project.name}
+version: ${project.version}
+api-version: 1.13
+main: ${project.groupId}.${project.artifactId}.${project.name}
+description: ${project.description}
+authors: [drives_a_ford]
+
+commands:
+  entitycount:
+    description: Counts entities in a world
+    usage: /command [ <world> ] [ <entity-type> ]
+    aliases: [ec]
+    permission: entitycount.command
+
+permissions:
+  entitycount.command:
+    description: Allows using the entitycound command
+    default: op
+

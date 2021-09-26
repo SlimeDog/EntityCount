@@ -1,0 +1,4 @@
+header: "Found a total of {total} mobs:"
+item: "{type}: {amount}"
+no-world-found: "World not found: {name}"
+no-entity-type-found: "Entity type not found: {name}"
