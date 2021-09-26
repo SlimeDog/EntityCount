@@ -8,7 +8,7 @@ authors: [drives_a_ford]
 commands:
   entitycount:
     description: Counts entities in a world
-    usage: /command [ <world> ] [ <entity-type> ]
+    usage: /<command> [ <world> ] [ <entity-type> ]
     aliases: [ec]
     permission: entitycount.command
 
