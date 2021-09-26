@@ -41,7 +41,7 @@ public class EntityCountCommand implements TabExecutor {
         if (args.length == 1) {
             return StringUtil.copyPartialMatches(args[0], getWorldNames(), list);
         } else if (args.length == 2) {
-            return StringUtil.copyPartialMatches(args[0], getEntityTypeNames(), list);
+            return StringUtil.copyPartialMatches(args[1], getEntityTypeNames(), list);
         }
         return list;
     }
