@@ -1,5 +1,6 @@
 package dev.ratas.entitycount;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,6 +19,9 @@ public class EntityCount extends JavaPlugin {
             return;
         }
         getCommand("entitycount").setExecutor(new EntityCountCommand(getServer(), messages));
+        if (getConfig().getBoolean("bstats-enabled", true)) {
+            new Metrics(this, 12888);
+        }
     }
 
     private void shutDownWith(Throwable e) {
