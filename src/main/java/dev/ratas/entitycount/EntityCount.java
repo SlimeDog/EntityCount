@@ -11,6 +11,7 @@ public class EntityCount extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         Messages messages;
         try {
             messages = new Messages(this);
