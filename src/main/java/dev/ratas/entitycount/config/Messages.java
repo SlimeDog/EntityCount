@@ -17,7 +17,8 @@ public class Messages extends CustomConfigHandler {
     }
 
     public String getItem(EntityType type, int amount) {
-        return getMessage("item", "{type}: {amount}");
+        return getMessage("item", "{type}: {amount}").replace("{type}", type.name()).replace("{amount}",
+                String.valueOf(amount));
     }
 
     public String getNoWorldFound(String name) {
