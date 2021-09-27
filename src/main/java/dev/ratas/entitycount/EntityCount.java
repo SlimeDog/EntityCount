@@ -20,7 +20,7 @@ public class EntityCount extends JavaPlugin {
             return;
         }
         getCommand("entitycount").setExecutor(new EntityCountCommand(getServer(), messages));
-        if (getConfig().getBoolean("bstats-enabled", true)) {
+        if (getConfig().getBoolean("enable-metrics", true)) {
             new Metrics(this, 12888);
         }
     }
