@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.ratas.entitycount.commands.EntityCountCommand;
 import dev.ratas.entitycount.config.Messages;
+import dev.ratas.entitycount.update.UpdateChecker;
 
 public class EntityCount extends JavaPlugin {
 
@@ -22,6 +23,22 @@ public class EntityCount extends JavaPlugin {
         getCommand("entitycount").setExecutor(new EntityCountCommand(getServer(), messages));
         if (getConfig().getBoolean("enable-metrics", true)) {
             new Metrics(this, 12888);
+        }
+        // update
+        if (getConfig().getBoolean("check-for-updates", true)) {
+            new UpdateChecker(this, (response, version) -> {
+                switch (response) {
+                    case LATEST:
+                        getLogger().info(messages.getRunningLatestVersion());
+                        break;
+                    case FOUND_NEW:
+                        getLogger().info(messages.getNewVersionAvailable(version));
+                        break;
+                    case UNAVAILABLE:
+                        getLogger().info(messages.getUpdateInfoUnavailable());
+                        break;
+                }
+            }).check();
         }
     }
 

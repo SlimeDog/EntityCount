@@ -29,6 +29,19 @@ public class Messages extends CustomConfigHandler {
         return getMessage("no-entity-type-found", "Entity type not found: {name}").replace("{name}", name);
     }
 
+    public String getRunningLatestVersion() {
+        return getMessage("update-running-latest-version", "Running latest version of EntityCount");
+    }
+
+    public String getNewVersionAvailable(String version) {
+        return getMessage("update-new-version-available", "A new version of EntityCount is available: {version}")
+                .replace("{version}", version);
+    }
+
+    public String getUpdateInfoUnavailable() {
+        return getMessage("update-info-unavailable", "Update info is not available at this time");
+    }
+
     private String getMessage(String path, String def) {
         return ChatColor.translateAlternateColorCodes('&', getConfig().getString(path, def));
     }
