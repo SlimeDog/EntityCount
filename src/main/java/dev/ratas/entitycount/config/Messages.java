@@ -42,6 +42,14 @@ public class Messages extends CustomConfigHandler {
         return getMessage("update-info-unavailable", "Update info is not available at this time");
     }
 
+    public String getRelaoded() {
+        return getMessage("reloaded", "Successfully reloaded");
+    }
+
+    public String getReloadFailed() {
+        return getMessage("reload-failed", "Failed to reload. Shutting down plugin.");
+    }
+
     private String getMessage(String path, String def) {
         return ChatColor.translateAlternateColorCodes('&', getConfig().getString(path, def));
     }
