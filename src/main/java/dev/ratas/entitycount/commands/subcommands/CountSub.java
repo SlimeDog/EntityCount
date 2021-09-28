@@ -26,7 +26,7 @@ import dev.ratas.entitycount.config.Messages;
 public class CountSub extends SimpleSubCommand {
     private static final String NAME = "count";
     private static final String USAGE = "/entitycount count [ <world> ] [ <entity-type> ]";
-    private static final String USAGE_CONSOLE = "entitycount count <world> [ <entity-type> ]";
+    private static final String USAGE_CONSOLE = "/entitycount count <world> [ <entity-type> ]";
     private static final String PERMS = "entitycount.use.count";
     private final Server server;
     private final Messages messages;

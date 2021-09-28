@@ -17,7 +17,12 @@ permissions:
     description: Allows using the entitycount parent command
     default: op
   entitycount.use.count:
-    description: Allows using the entitycount command
+    description: Allows counting of entities
+    default: op
+    children:
+      entitycount.use: true
+  entitycount.use.reload:
+    description: Allows reloading the plugin / messages
     default: op
     children:
       entitycount.use: true
