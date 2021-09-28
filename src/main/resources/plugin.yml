@@ -14,5 +14,10 @@ commands:
 
 permissions:
   entitycount.use:
+    description: Allows using the entitycount parent command
+    default: op
+  entitycount.use.count:
     description: Allows using the entitycount command
     default: op
+    children:
+      entitycount.use: true
