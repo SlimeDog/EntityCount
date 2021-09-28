@@ -10,7 +10,7 @@ import dev.ratas.entitycount.config.Messages;
 public class EntityCountCommand extends AbstractParentCommand {
 
     public EntityCountCommand(EntityCount plugin, Server server, Messages messages) {
-        super(generateSubCommands(plugin, server, messages));
+        super(true, generateSubCommands(plugin, server, messages));
     }
 
     private static SimpleSubCommand[] generateSubCommands(EntityCount plugin, Server server, Messages messages) {

@@ -15,9 +15,12 @@ import org.bukkit.util.StringUtil;
 public abstract class AbstractParentCommand implements TabExecutor {
     private final Map<String, SimpleSubCommand> commands = new LinkedHashMap<>();
 
-    protected AbstractParentCommand(SimpleSubCommand... cmds) {
+    protected AbstractParentCommand(boolean addSimpleHelp, SimpleSubCommand... cmds) {
         for (SimpleSubCommand cmd : cmds) {
             addSubCommand(cmd);
+        }
+        if (addSimpleHelp) {
+            commands.put("help", null); // will tab-complete for it but nottry to execute it
         }
     }
 
@@ -26,13 +29,17 @@ public abstract class AbstractParentCommand implements TabExecutor {
         if (args.length == 1) {
             List<String> subs = new ArrayList<>();
             for (SimpleSubCommand sc : commands.values()) {
+                if (sc == null) {
+                    subs.add("help");
+                    continue;
+                }
                 if (sc.hasPermission(sender) && (!sc.needsPlayer() || sender instanceof Player)) {
                     subs.add(sc.getName());
                 }
             }
             return StringUtil.copyPartialMatches(args[0], subs, list);
         }
-        SimpleSubCommand sub = getSimpleSubCommand(args[0]);
+        SimpleSubCommand sub = getSubCommand(args[0]);
         if (sub == null || !sub.hasPermission(sender) || (sub.needsPlayer() && !(sender instanceof Player)))
             return list;
         return sub.getTabComletions(sender, Arrays.copyOfRange(args, 1, args.length));
@@ -43,7 +50,7 @@ public abstract class AbstractParentCommand implements TabExecutor {
             sender.sendMessage(getUsage(sender, args));
             return true;
         }
-        SimpleSubCommand sub = getSimpleSubCommand(args[0]);
+        SimpleSubCommand sub = getSubCommand(args[0]);
         if (sub == null || !sub.hasPermission(sender)) {
             sender.sendMessage(getUsage(sender, args));
             return true;
@@ -66,7 +73,7 @@ public abstract class AbstractParentCommand implements TabExecutor {
         return commands.remove(name.toLowerCase());
     }
 
-    public SimpleSubCommand getSimpleSubCommand(String name) {
+    public SimpleSubCommand getSubCommand(String name) {
         return commands.get(name.toLowerCase());
     }
 
@@ -77,6 +84,9 @@ public abstract class AbstractParentCommand implements TabExecutor {
     public String getUsage(CommandSender sender, String[] args) {
         StringBuilder builder = new StringBuilder();
         for (SimpleSubCommand sub : getSimpleSubCommands()) {
+            if (sub == null) {
+                continue; // help command
+            }
             if (sub.hasPermission(sender)) {
                 if (builder.length() > 0) {
                     builder.append("\n");
