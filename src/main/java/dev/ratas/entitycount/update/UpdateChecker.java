@@ -14,7 +14,7 @@ import com.google.common.net.HttpHeaders;
 import dev.ratas.entitycount.EntityCount;
 
 public class UpdateChecker {
-    private static final int ID = -1; // TODO use correct ID
+    private static final int ID = 96546;
     private static final String SPIGOT_URL = "https://api.spigotmc.org/legacy/update.php?resource=" + ID;
 
     private final EntityCount br;
