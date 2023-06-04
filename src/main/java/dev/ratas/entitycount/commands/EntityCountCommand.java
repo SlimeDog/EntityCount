@@ -6,15 +6,19 @@ import dev.ratas.entitycount.EntityCount;
 import dev.ratas.entitycount.commands.subcommands.CountSub;
 import dev.ratas.entitycount.commands.subcommands.ReloadSub;
 import dev.ratas.entitycount.config.Messages;
+import dev.ratas.slimedogcore.api.commands.SDCSubCommand;
+import dev.ratas.slimedogcore.impl.commands.BukkitFacingParentCommand;
 
-public class EntityCountCommand extends AbstractParentCommand {
+public class EntityCountCommand extends BukkitFacingParentCommand {
 
     public EntityCountCommand(EntityCount plugin, Server server, Messages messages) {
-        super(true, generateSubCommands(plugin, server, messages));
+        for (SDCSubCommand sc : generateSubCommands(plugin, server, messages)) {
+            this.addSubCommand(sc);
+        }
     }
 
-    private static SimpleSubCommand[] generateSubCommands(EntityCount plugin, Server server, Messages messages) {
-        return new SimpleSubCommand[] { new CountSub(server, messages), new ReloadSub(plugin, messages) };
+    private static SDCSubCommand[] generateSubCommands(EntityCount plugin, Server server, Messages messages) {
+        return new SDCSubCommand[] { new CountSub(server, messages), new ReloadSub(plugin, messages) };
     }
 
 }
