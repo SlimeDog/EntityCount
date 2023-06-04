@@ -1,5 +1,7 @@
 package dev.ratas.entitycount;
 
+import java.util.function.BiConsumer;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -11,6 +13,8 @@ import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
 
 public class EntityCount extends SlimeDogCore {
     private static final int SPIGOT_ID = 96546;
+    private static final String HANGAR_AUTHOR = "SlimeDog";
+    private static final String HANGAR_SLUG = "EntityCount";
     private Messages messages;
 
     @Override
@@ -28,7 +32,8 @@ public class EntityCount extends SlimeDogCore {
         }
         // update
         if (getConfig().getBoolean("check-for-updates", true)) {
-            UpdateChecker.forSpigot(this, (response, version) -> {
+            String updateSource = getConfig().getString("update-source", "Hangar");
+            BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, version) -> {
                 switch (response) {
                     case LATEST:
                         getLogger().info(messages.getRunningLatestVersion().getMessage().getRaw());
@@ -40,7 +45,12 @@ public class EntityCount extends SlimeDogCore {
                         getLogger().info(messages.getUpdateInfoUnavailable().getMessage().getRaw());
                         break;
                 }
-            }, SPIGOT_ID).check();
+            };
+            if (updateSource.equalsIgnoreCase("SpigotMC")) {
+                UpdateChecker.forSpigot(this, consumer, SPIGOT_ID).check();
+            } else {
+                UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+            }
         }
     }
 
