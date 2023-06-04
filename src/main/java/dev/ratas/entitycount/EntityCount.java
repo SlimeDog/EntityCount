@@ -2,17 +2,18 @@ package dev.ratas.entitycount;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.ratas.entitycount.commands.EntityCountCommand;
 import dev.ratas.entitycount.config.Messages;
 import dev.ratas.entitycount.update.UpdateChecker;
 
-public class EntityCount extends JavaPlugin {
+import dev.ratas.slimedogcore.impl.SlimeDogCore;
+
+public class EntityCount extends SlimeDogCore {
     private Messages messages;
 
     @Override
-    public void onEnable() {
+    public void pluginEnabled() {
         saveDefaultConfig();
         try {
             messages = new Messages(this);
@@ -29,17 +30,21 @@ public class EntityCount extends JavaPlugin {
             new UpdateChecker(this, (response, version) -> {
                 switch (response) {
                     case LATEST:
-                        getLogger().info(messages.getRunningLatestVersion());
+                        getLogger().info(messages.getRunningLatestVersion().getMessage().getRaw());
                         break;
                     case FOUND_NEW:
-                        getLogger().info(messages.getNewVersionAvailable(version));
+                        getLogger().info(messages.getNewVersionAvailable().createWith(version).getRaw());
                         break;
                     case UNAVAILABLE:
-                        getLogger().info(messages.getUpdateInfoUnavailable());
+                        getLogger().info(messages.getUpdateInfoUnavailable().getMessage().getRaw());
                         break;
                 }
             }).check();
         }
+    }
+
+    @Override
+    public void pluginDisabled() {
     }
 
     private void shutDownWith(Throwable e) {
@@ -52,7 +57,7 @@ public class EntityCount extends JavaPlugin {
         reloadConfig();
         try {
             messages.reloadConfig();
-        } catch (InvalidConfigurationException e) {
+        } catch (RuntimeException e) {
             shutDownWith(e);
             return false;
         }

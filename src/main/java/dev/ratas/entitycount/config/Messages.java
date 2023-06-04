@@ -1,57 +1,90 @@
 package dev.ratas.entitycount.config;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class Messages extends CustomConfigHandler {
+import dev.ratas.slimedogcore.api.messaging.factory.SDCDoubleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCSingleContextMessageFactory;
+import dev.ratas.slimedogcore.api.messaging.factory.SDCVoidContextMessageFactory;
+import dev.ratas.slimedogcore.impl.SlimeDogCore;
+import dev.ratas.slimedogcore.impl.messaging.MessagesBase;
+import dev.ratas.slimedogcore.impl.messaging.factory.MsgUtil;
+
+public class Messages extends MessagesBase {
     private static final String NAME = "messages.yml";
+    private SDCSingleContextMessageFactory<Integer> header;
+    private SDCDoubleContextMessageFactory<EntityType, Integer> item;
+    private SDCSingleContextMessageFactory<String> noWorldFound;
+    private SDCSingleContextMessageFactory<String> noEntityTypeFound;
+    private SDCVoidContextMessageFactory runningLatestVersion;
+    private SDCSingleContextMessageFactory<String> newVersionAvailable;
+    private SDCVoidContextMessageFactory updateInfoUnavailable;
+    private SDCVoidContextMessageFactory reloadSuccessful;
+    private SDCVoidContextMessageFactory reloadFailed;
 
-    public Messages(JavaPlugin plugin) throws InvalidConfigurationException {
-        super(plugin, NAME);
+    public Messages(SlimeDogCore plugin) throws InvalidConfigurationException {
+        super(plugin.getCustomConfigManager().getConfig(NAME));
+        load();
     }
 
-    public String getHeader(int total) {
-        return getMessage("header", "Found a total of {total} mobs:").replace("{total}", String.valueOf(total));
+    private void load() {
+        header = MsgUtil.singleContext("{total}", total -> String.valueOf(total),
+                getRawMessage("header", "Found a total of {total} mobs:"));
+        item = MsgUtil.doubleContext("{type}", type -> type.name(), "{amount}", amount -> String.valueOf(amount),
+                getRawMessage("item", "{type}: {amount}"));
+        noWorldFound = MsgUtil.singleContext("{name}", name -> name,
+                getRawMessage("no-world-found", "World not found: {name}"));
+        noEntityTypeFound = MsgUtil.singleContext("{name}", name -> name,
+                getRawMessage("no-entity-type-found", "Entity type not found: {name}"));
+        runningLatestVersion = MsgUtil
+                .voidContext(getRawMessage("update-running-latest-version", "Running latest version of EntityCount"));
+        newVersionAvailable = MsgUtil.singleContext("{version}", version -> version,
+                getRawMessage("update-new-version-available", "A new version of EntityCount is available: {version}"));
+        updateInfoUnavailable = MsgUtil
+                .voidContext(getRawMessage("update-info-unavailable", "Update info is not available at this time"));
+        reloadSuccessful = MsgUtil.voidContext(getRawMessage("reloaded", "Successfully reloaded"));
+        reloadFailed = MsgUtil.voidContext(getRawMessage("reload-failed", "Failed to reload. Shutting down plugin."));
     }
 
-    public String getItem(EntityType type, int amount) {
-        return getMessage("item", "{type}: {amount}").replace("{type}", type.name()).replace("{amount}",
-                String.valueOf(amount));
+    public void reload() {
+        super.reload();
+        load();
     }
 
-    public String getNoWorldFound(String name) {
-        return getMessage("no-world-found", "World not found: {name}").replace("{name}", name);
+    public SDCSingleContextMessageFactory<Integer> getHeader() {
+        return header;
     }
 
-    public String getNoEntityTypeFound(String name) {
-        return getMessage("no-entity-type-found", "Entity type not found: {name}").replace("{name}", name);
+    public SDCDoubleContextMessageFactory<EntityType, Integer> getItem() {
+        return item;
     }
 
-    public String getRunningLatestVersion() {
-        return getMessage("update-running-latest-version", "Running latest version of EntityCount");
+    public SDCSingleContextMessageFactory<String> getNoWorldFound() {
+        return noWorldFound;
     }
 
-    public String getNewVersionAvailable(String version) {
-        return getMessage("update-new-version-available", "A new version of EntityCount is available: {version}")
-                .replace("{version}", version);
+    public SDCSingleContextMessageFactory<String> getNoEntityTypeFound(String name) {
+        return noEntityTypeFound;
     }
 
-    public String getUpdateInfoUnavailable() {
-        return getMessage("update-info-unavailable", "Update info is not available at this time");
+    public SDCVoidContextMessageFactory getRunningLatestVersion() {
+        return runningLatestVersion;
     }
 
-    public String getRelaoded() {
-        return getMessage("reloaded", "Successfully reloaded");
+    public SDCSingleContextMessageFactory<String> getNewVersionAvailable() {
+        return newVersionAvailable;
     }
 
-    public String getReloadFailed() {
-        return getMessage("reload-failed", "Failed to reload. Shutting down plugin.");
+    public SDCVoidContextMessageFactory getUpdateInfoUnavailable() {
+        return updateInfoUnavailable;
     }
 
-    private String getMessage(String path, String def) {
-        return ChatColor.translateAlternateColorCodes('&', getConfig().getString(path, def));
+    public SDCVoidContextMessageFactory getRelaoded() {
+        return reloadSuccessful;
+    }
+
+    public SDCVoidContextMessageFactory getReloadFailed() {
+        return reloadFailed;
     }
 
 }
