@@ -5,11 +5,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import dev.ratas.entitycount.commands.EntityCountCommand;
 import dev.ratas.entitycount.config.Messages;
-import dev.ratas.entitycount.update.UpdateChecker;
 
 import dev.ratas.slimedogcore.impl.SlimeDogCore;
+import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
 
 public class EntityCount extends SlimeDogCore {
+    private static final int SPIGOT_ID = 96546;
     private Messages messages;
 
     @Override
@@ -27,7 +28,7 @@ public class EntityCount extends SlimeDogCore {
         }
         // update
         if (getConfig().getBoolean("check-for-updates", true)) {
-            new UpdateChecker(this, (response, version) -> {
+            UpdateChecker.forSpigot(this, (response, version) -> {
                 switch (response) {
                     case LATEST:
                         getLogger().info(messages.getRunningLatestVersion().getMessage().getRaw());
@@ -39,7 +40,7 @@ public class EntityCount extends SlimeDogCore {
                         getLogger().info(messages.getUpdateInfoUnavailable().getMessage().getRaw());
                         break;
                 }
-            }).check();
+            }, SPIGOT_ID).check();
         }
     }
 
