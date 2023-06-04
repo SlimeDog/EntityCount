@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.ratas</groupId>
   <artifactId>entitycount</artifactId>
@@ -17,6 +19,10 @@
       <id>bukkit-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>jitpack.io</id> <!-- For automated building of SlimeDogCore-->
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -25,6 +31,12 @@
       <artifactId>spigot-api</artifactId>
       <version>1.17.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.SlimeDog</groupId>
+      <artifactId>SlimeDogCore</artifactId>
+      <version>1.0.8</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.bstats</groupId>
@@ -78,6 +90,10 @@
             <relocation>
               <pattern>org.bstats</pattern>
               <shadedPattern>dev.ratas.entitycount</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>dev.ratas.slimedogcore</pattern>
+              <shadedPattern>${project.groupId}.${project.artifactId}.core</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
