@@ -63,7 +63,7 @@ public class Messages extends MessagesBase {
         return noWorldFound;
     }
 
-    public SDCSingleContextMessageFactory<String> getNoEntityTypeFound(String name) {
+    public SDCSingleContextMessageFactory<String> getNoEntityTypeFound() {
         return noEntityTypeFound;
     }
 
