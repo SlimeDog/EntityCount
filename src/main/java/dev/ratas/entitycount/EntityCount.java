@@ -46,11 +46,13 @@ public class EntityCount extends SlimeDogCore {
                         break;
                 }
             };
+            UpdateChecker checker;
             if (updateSource.equalsIgnoreCase("SpigotMC")) {
-                UpdateChecker.forSpigot(this, consumer, SPIGOT_ID).check();
+                checker = UpdateChecker.forSpigot(this, consumer, SPIGOT_ID);
             } else {
-                UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+                checker = UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
             }
+            checker.check();
         }
     }
 
