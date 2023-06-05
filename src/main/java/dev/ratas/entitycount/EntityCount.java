@@ -68,10 +68,12 @@ public class EntityCount extends SlimeDogCore {
         reloadConfig();
         try {
             messages.reloadConfig();
+            messages.reload();
         } catch (RuntimeException e) {
             shutDownWith(e);
             return false;
         }
+        getDefaultConfig().reload();
         return true;
     }
 
