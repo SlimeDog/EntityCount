@@ -36,13 +36,13 @@ public class EntityCount extends SlimeDogCore {
             BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, version) -> {
                 switch (response) {
                     case LATEST:
-                        messages.getRunningLatestVersion().getMessage().sendTo(getConsoleRecipient());
+                        getLogger().info(messages.getRunningLatestVersion().getMessage().getFilled());
                         break;
                     case FOUND_NEW:
-                        messages.getNewVersionAvailable().createWith(version).sendTo(getConsoleRecipient());
+                        getLogger().info(messages.getNewVersionAvailable().createWith(version).getFilled());
                         break;
                     case UNAVAILABLE:
-                        messages.getUpdateInfoUnavailable().getMessage().sendTo(getConsoleRecipient());
+                        getLogger().info(messages.getUpdateInfoUnavailable().getMessage().getFilled());
                         break;
                 }
             };
