@@ -9,21 +9,22 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import dev.ratas.entitycount.commands.SimpleSubCommand;
 import dev.ratas.entitycount.config.Messages;
+import dev.ratas.slimedogcore.api.commands.SDCCommandOptionSet;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCPlayerRecipient;
+import dev.ratas.slimedogcore.api.messaging.recipient.SDCRecipient;
+import dev.ratas.slimedogcore.impl.commands.AbstractSubCommand;
 
 /**
  * in-game: entitycount count [ <world> ] [ <entity-type> ]
  *
  * console: entitycount count <world> [ <entity-type> ]​
  */
-public class CountSub extends SimpleSubCommand {
+public class CountSub extends AbstractSubCommand {
     private static final String NAME = "count";
     private static final String USAGE = "/entitycount count [ <world> ] [ <entity-type> ]";
     private static final String USAGE_CONSOLE = "/entitycount count <world> [ <entity-type> ]";
@@ -34,21 +35,21 @@ public class CountSub extends SimpleSubCommand {
     private List<String> entityTypeNames; // lazy initialization
 
     public CountSub(Server server, Messages messages) {
-        super(NAME, USAGE, PERMS, false);
+        super(NAME, PERMS, USAGE);
         this.server = server;
         this.messages = messages;
     }
 
     @Override
-    public String getUsage(CommandSender sender, String[] args) {
-        if (sender instanceof Player) {
+    public String getUsage(SDCRecipient sender, String[] args) {
+        if (sender.isPlayer()) {
             return super.getUsage(sender, args);
         }
         return USAGE_CONSOLE;
     }
 
     @Override
-    public List<String> getTabComletions(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(SDCRecipient sender, String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             return StringUtil.copyPartialMatches(args[0], getWorldNames(), list);
@@ -59,12 +60,12 @@ public class CountSub extends SimpleSubCommand {
     }
 
     @Override
-    public boolean executeCommand(CommandSender sender, String[] args) {
+    public boolean onOptionedCommand(SDCRecipient sender, String[] args, SDCCommandOptionSet opts) {
         World world;
         try {
             world = getSpecifiedWorld(sender, args);
         } catch (WorldNotFoundException e) {
-            sender.sendMessage(messages.getNoWorldFound(e.worldName));
+            sender.sendMessage(messages.getNoWorldFound().createWith(e.worldName));
             return true;
         } catch (NoWorldSpecifiedException e) {
             return false;
@@ -73,7 +74,7 @@ public class CountSub extends SimpleSubCommand {
         try {
             type = getSpecifiedEntityType(args);
         } catch (NoEntityTypeFoundException e) {
-            sender.sendMessage(messages.getNoEntityTypeFound(e.name));
+            sender.sendMessage(messages.getNoEntityTypeFound().createWith(e.name));
             return true;
         }
         EntityCountResults totals = findEntitiesIn(world, type);
@@ -81,18 +82,18 @@ public class CountSub extends SimpleSubCommand {
         return true;
     }
 
-    private void sendTotals(CommandSender sender, EntityCountResults totals, EntityType targetType) {
+    private void sendTotals(SDCRecipient sender, EntityCountResults totals, EntityType targetType) {
         if (targetType != null) {
             int total = totals.counts.getOrDefault(targetType, 0);
-            sender.sendMessage(messages.getItem(targetType, total));
+            sender.sendMessage(messages.getItem().createWith(targetType, total));
             return;
         }
         List<EntityType> sortedList = new ArrayList<>(totals.counts.keySet());
         sortedList.sort((a, b) -> a.name().compareTo(b.name()));
-        sender.sendMessage(messages.getHeader(totals.total));
+        sender.sendMessage(messages.getHeader().createWith(totals.total));
         for (EntityType type : sortedList) {
             int val = totals.counts.get(type);
-            sender.sendMessage(messages.getItem(type, val));
+            sender.sendMessage(messages.getItem().createWith(type, val));
         }
     }
 
@@ -121,10 +122,10 @@ public class CountSub extends SimpleSubCommand {
         }
     }
 
-    private World getSpecifiedWorld(CommandSender sender, String[] args) {
-        if (sender instanceof Player && args.length < 1) {
-            return ((Player) sender).getWorld();
-        } else if (sender instanceof Player) {
+    private World getSpecifiedWorld(SDCRecipient sender, String[] args) {
+        if (sender.isPlayer() && args.length < 1) {
+            return ((SDCPlayerRecipient) sender).getLocation().getWorld();
+        } else if (sender.isPlayer()) {
             World world = server.getWorld(args[0]);
             if (world == null) {
                 throw new WorldNotFoundException(args[0]);

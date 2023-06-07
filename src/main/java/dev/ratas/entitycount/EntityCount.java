@@ -1,18 +1,24 @@
 package dev.ratas.entitycount;
 
+import java.util.function.BiConsumer;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.ratas.entitycount.commands.EntityCountCommand;
 import dev.ratas.entitycount.config.Messages;
-import dev.ratas.entitycount.update.UpdateChecker;
 
-public class EntityCount extends JavaPlugin {
+import dev.ratas.slimedogcore.impl.SlimeDogCore;
+import dev.ratas.slimedogcore.impl.utils.UpdateChecker;
+
+public class EntityCount extends SlimeDogCore {
+    private static final int SPIGOT_ID = 96546;
+    private static final String HANGAR_AUTHOR = "SlimeDog";
+    private static final String HANGAR_SLUG = "EntityCount";
     private Messages messages;
 
     @Override
-    public void onEnable() {
+    public void pluginEnabled() {
         saveDefaultConfig();
         try {
             messages = new Messages(this);
@@ -26,20 +32,32 @@ public class EntityCount extends JavaPlugin {
         }
         // update
         if (getConfig().getBoolean("check-for-updates", true)) {
-            new UpdateChecker(this, (response, version) -> {
+            String updateSource = getConfig().getString("update-source", "Hangar");
+            BiConsumer<UpdateChecker.VersionResponse, String> consumer = (response, version) -> {
                 switch (response) {
                     case LATEST:
-                        getLogger().info(messages.getRunningLatestVersion());
+                        getLogger().info(messages.getRunningLatestVersion().getMessage().getFilled());
                         break;
                     case FOUND_NEW:
-                        getLogger().info(messages.getNewVersionAvailable(version));
+                        getLogger().info(messages.getNewVersionAvailable().createWith(version).getFilled());
                         break;
                     case UNAVAILABLE:
-                        getLogger().info(messages.getUpdateInfoUnavailable());
+                        getLogger().info(messages.getUpdateInfoUnavailable().getMessage().getFilled());
                         break;
                 }
-            }).check();
+            };
+            UpdateChecker checker;
+            if (updateSource.equalsIgnoreCase("SpigotMC")) {
+                checker = UpdateChecker.forSpigot(this, consumer, SPIGOT_ID);
+            } else {
+                checker = UpdateChecker.forHangar(this, consumer, HANGAR_AUTHOR, HANGAR_SLUG);
+            }
+            checker.check();
         }
+    }
+
+    @Override
+    public void pluginDisabled() {
     }
 
     private void shutDownWith(Throwable e) {
@@ -52,10 +70,12 @@ public class EntityCount extends JavaPlugin {
         reloadConfig();
         try {
             messages.reloadConfig();
-        } catch (InvalidConfigurationException e) {
+            messages.reload();
+        } catch (RuntimeException e) {
             shutDownWith(e);
             return false;
         }
+        getDefaultConfig().reload();
         return true;
     }
 

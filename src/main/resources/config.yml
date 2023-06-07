@@ -6,12 +6,17 @@
 # Implementation: drives_a_ford
 # Testing: SlimeDog
 #
-# Minecraft version support: 1.13.2, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.x
+# Supported MC versions:
+# https://github.com/SlimeDog/EntityCount#readme
+# Default configuration:
+# https://github.com/SlimeDog/EntityCount/blob/master/src/main/resources/config.yml
 #
 
 # ========== CHECK FOR UPDATES =====================================================================
 # If you do not want notification of available updates in the console log, you may disable it here.
 check-for-updates: true
+# Update source may be either Hangar (default) or SpigotMC.
+update-source: Hangar
 
 # ========== BSTATS METRICS ========================================================================
 # By default, the plugin collects and transmits anonymous statistics to bstats.org.
