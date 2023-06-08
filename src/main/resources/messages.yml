@@ -1,3 +1,8 @@
+# EntityCount messages
+# Both legacy and MiniMessage format codes are supported.
+# See https://github.com/SlimeDog/SlimeDogCore/wiki/Formatting-Codes.
+#
+
 header: "Found a total of {total} entities in loaded chunks:"
 item: "{type}: {amount}"
 no-world-found: "World not found: {name}"
