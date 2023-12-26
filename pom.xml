@@ -74,7 +74,7 @@
           <source>11</source>
           <target>11</target>
         </configuration>
-        <version>3.11.0</version>
+        <version>3.12.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
