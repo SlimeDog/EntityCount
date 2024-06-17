@@ -11,7 +11,6 @@ Completed tasks:
   - `README` for SlimeDog/EntityCount repository on Github
   - `Home` page of SlimeDog/EntityCount wiki on Github
 - Archived SlimeDog/EntityCount Github repository
-- Removed SlimeDog/EntityCount from bStats
 - Removed SlimeDog/EntityCount from Hangar
 
 Support for future Minecraft versions:
