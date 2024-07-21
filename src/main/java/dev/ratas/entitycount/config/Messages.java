@@ -46,7 +46,7 @@ public class Messages extends MessagesBase {
         reloadSuccessful = MsgUtil.voidContext(getRawMessage("reloaded", "Successfully reloaded"));
         reloadFailed = MsgUtil.voidContext(getRawMessage("reload-failed", "Failed to reload. Shutting down plugin."));
         regionLoadedChunks = MsgUtil.voidContext(getRawMessage("region-entities-only-in-loaded-chunks",
-                "You were looking up entities in a region. Entities will only be counted in loaded chunks."));
+                "Counting entities in a region. Only entities in loaded chunks will be counted."));
     }
 
     public void reload() {
