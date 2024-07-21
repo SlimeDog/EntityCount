@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.ratas</groupId>
   <artifactId>entitycount</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2-SNAPSHOT</version>
   <name>EntityCount</name>
   <description>Count entities in a world</description>
   <properties>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.github.SlimeDog</groupId>
       <artifactId>SlimeDogCore</artifactId>
-      <version>1.0.10</version>
+      <version>1.1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

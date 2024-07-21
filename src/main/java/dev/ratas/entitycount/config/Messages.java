@@ -21,6 +21,7 @@ public class Messages extends MessagesBase {
     private SDCVoidContextMessageFactory updateInfoUnavailable;
     private SDCVoidContextMessageFactory reloadSuccessful;
     private SDCVoidContextMessageFactory reloadFailed;
+    private SDCVoidContextMessageFactory regionLoadedChunks;
 
     public Messages(SlimeDogCore plugin) throws InvalidConfigurationException {
         super(plugin.getCustomConfigManager().getConfig(NAME));
@@ -44,6 +45,8 @@ public class Messages extends MessagesBase {
                 .voidContext(getRawMessage("update-info-unavailable", "Update info is not available at this time"));
         reloadSuccessful = MsgUtil.voidContext(getRawMessage("reloaded", "Successfully reloaded"));
         reloadFailed = MsgUtil.voidContext(getRawMessage("reload-failed", "Failed to reload. Shutting down plugin."));
+        regionLoadedChunks = MsgUtil.voidContext(getRawMessage("region-entities-only-in-loaded-chunks",
+                "You were looking up entities in a region. Entities will only be counted in loaded chunks."));
     }
 
     public void reload() {
@@ -85,6 +88,10 @@ public class Messages extends MessagesBase {
 
     public SDCVoidContextMessageFactory getReloadFailed() {
         return reloadFailed;
+    }
+
+    public SDCVoidContextMessageFactory getRegionLoadedChunks() {
+        return regionLoadedChunks;
     }
 
 }
