@@ -87,11 +87,15 @@ public class CountSub extends AbstractSubCommand {
             return true;
         }
         EntityCountResults totals = findEntitiesIn(target, type);
-        sendTotals(sender, totals, type);
+        sendTotals(sender, target, totals, type);
         return true;
     }
 
-    private void sendTotals(SDCRecipient sender, EntityCountResults totals, EntityType targetType) {
+    private void sendTotals(SDCRecipient sender, LookUpTarget target, EntityCountResults totals,
+            EntityType targetType) {
+        if (target instanceof RegionTarget) {
+            sender.sendMessage(messages.getRegionLoadedChunks().getMessage());
+        }
         if (targetType != null) {
             int total = totals.counts.getOrDefault(targetType, 0);
             sender.sendMessage(messages.getItem().createWith(targetType, total));
