@@ -29,7 +29,7 @@ public class CountSub extends AbstractSubCommand {
     private static final String NAME = "count";
     private static final String USAGE = String.join("\n",
             "/entitycount count [ <world> ] [ <entity-type> ]",
-            "/entitycount count world [ <entity-type> ]",
+            "/entitycount count region [ <entity-type> ]",
             "/entitycount count chunk [ <entity-type> ]");
     private static final String USAGE_CONSOLE = "/entitycount count <world> [ <entity-type> ]";
     private static final String PERMS = "entitycount.use.count";
